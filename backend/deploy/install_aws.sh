@@ -23,13 +23,25 @@ else
     echo "Docker ya está instalado."
 fi
 
-echo -e "${GREEN}[3/5] Obteniendo código fuente...${NC}"
-# Asumimos que el script se ejecuta dentro de la carpeta clonada o la clona
-if [ ! -d "BoardWave" ]; then
-    git clone https://github.com/MateoDumas/BoardWave.git
-    cd BoardWave
+echo -e "${GREEN}[3/5] Verificando código fuente...${NC}"
+
+# Lógica inteligente para detectar ubicación
+if [ -f "../../docker-compose.yml" ]; then
+    echo "Detectado ejecución desde backend/deploy. Subiendo a raíz..."
+    cd ../..
+elif [ -f "docker-compose.yml" ]; then
+    echo "Ya estamos en la raíz del proyecto."
 else
-    echo "Ya estamos en el directorio o existe."
+    echo "No se encontró el proyecto. Clonando repositorio..."
+    if [ -d "BoardWave" ]; then
+        echo "La carpeta BoardWave ya existe. Entrando..."
+        cd BoardWave
+        echo "Actualizando código..."
+        git pull
+    else
+        git clone https://github.com/MateoDumas/BoardWave.git
+        cd BoardWave
+    fi
 fi
 
 # 3. Configurar IP Pública automáticamente
@@ -38,16 +50,24 @@ PUBLIC_IP=$(curl -s http://checkip.amazonaws.com)
 echo "IP Pública detectada: $PUBLIC_IP"
 
 # Crear archivo .env para docker-compose
+# Solo si no existe o queremos forzar actualización
+echo "Generando .env..."
 echo "PUBLIC_IP=$PUBLIC_IP" > .env
 echo "JWT_SECRET=$(openssl rand -hex 32)" >> .env
+echo "POSTGRES_USER=postgres" >> .env
+echo "POSTGRES_PASSWORD=password" >> .env
+echo "POSTGRES_DB=boardwave" >> .env
 
 echo -e "${GREEN}[5/5] Iniciando contenedores...${NC}"
 # Necesitamos sudo si el usuario actual no ha reiniciado sesión para pillar el grupo docker
+sudo docker compose down
 sudo docker compose up -d --build
 
 echo -e "${BLUE}=== ¡Despliegue Completado! ===${NC}"
 echo -e "Backend corriendo en: http://$PUBLIC_IP:3000"
 echo -e "WebSocket en: ws://$PUBLIC_IP:3000"
-echo -e "Asegúrate de que el Security Group de AWS permita:"
-echo -e " - TCP 3000"
-echo -e " - UDP 10000-10050"
+echo -e ""
+echo -e "IMPORTANTE: Configura el Security Group en AWS:"
+echo -e " - TCP 3000 (Custom TCP)"
+echo -e " - UDP 10000-10050 (Custom UDP)"
+echo -e " - SSH 22 (Ya debería estar)"
