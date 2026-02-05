@@ -36,7 +36,17 @@ export default function Whiteboard({ roomId }: WhiteboardProps) {
 
     // 2. Conectar provider (WebSocket)
     // Conectamos a /yjs/ROOM_ID
-    const baseUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
+    const getBaseUrl = () => {
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const backendParam = params.get('backend');
+        if (backendParam) {
+          return backendParam.replace(/^http/, 'ws');
+        }
+      }
+      return import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
+    };
+    const baseUrl = getBaseUrl();
     const wsUrl = `${baseUrl}/yjs/${roomId}`;
     const provider = new WebsocketProvider(wsUrl, roomId, ydoc);
     providerRef.current = provider;

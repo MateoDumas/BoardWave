@@ -1,7 +1,16 @@
 import { io, Socket } from 'socket.io-client';
 import { create } from 'zustand';
 
-const SERVER_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const getSocketUrl = () => {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const backendParam = params.get('backend');
+    if (backendParam) return backendParam;
+  }
+  return import.meta.env.VITE_API_URL || 'http://localhost:3000';
+};
+
+const SERVER_URL = getSocketUrl();
 
 interface User {
   socketId: string;

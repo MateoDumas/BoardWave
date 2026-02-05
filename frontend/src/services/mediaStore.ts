@@ -59,14 +59,14 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
     const producerTransport = device.createSendTransport(sendParams.params);
     
-    producerTransport.on('connect', ({ dtlsParameters }, callback, _errback) => {
+    producerTransport.on('connect', ({ dtlsParameters }, callback) => {
       socket.emit('connectTransport', { 
         transportId: producerTransport.id, 
         dtlsParameters 
       }, () => callback());
     });
 
-    producerTransport.on('produce', ({ kind, rtpParameters, appData }, callback, _errback) => {
+    producerTransport.on('produce', ({ kind, rtpParameters, appData }, callback) => {
       socket.emit('produce', { 
         transportId: producerTransport.id, 
         kind, 
@@ -87,7 +87,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
     const consumerTransport = device.createRecvTransport(recvParams.params);
 
-    consumerTransport.on('connect', ({ dtlsParameters }, callback, _errback) => {
+    consumerTransport.on('connect', ({ dtlsParameters }, callback) => {
         socket.emit('connectTransport', { 
           transportId: consumerTransport.id, 
           dtlsParameters 
