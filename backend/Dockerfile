@@ -18,7 +18,7 @@ FROM node:18-bullseye-slim
 WORKDIR /app
 
 # Instalar dependencias de runtime (si es necesario)
-RUN apt-get update && apt-get install -y python3 build-essential
+RUN apt-get update && apt-get install -y python3 python3-pip build-essential
 
 COPY package*.json ./
 RUN npm install --production
