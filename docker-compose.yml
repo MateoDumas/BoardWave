@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+      - "10000-10050:10000-10050/udp"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - MEDIASOUP_MIN_PORT=10000
+      - MEDIASOUP_MAX_PORT=10050
+      - MEDIASOUP_ANNOUNCED_IP=${PUBLIC_IP:-127.0.0.1}
+      - DATABASE_URL=postgres://postgres:password@db:5432/boardwave
+      - JWT_SECRET=${JWT_SECRET:-changeme}
+    depends_on:
+      - db
+    networks:
+      - boardwave-net
+
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=boardwave
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - boardwave-net
+
+volumes:
+  db_data:
+
+networks:
+  boardwave-net:

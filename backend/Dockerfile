@@ -27,12 +27,12 @@ COPY --from=builder /app/dist ./dist
 
 # Variables de entorno por defecto
 ENV PORT=3000
-ENV MEDIASOUP_MIN_PORT=2000
-ENV MEDIASOUP_MAX_PORT=2020
+ENV MEDIASOUP_MIN_PORT=10000
+ENV MEDIASOUP_MAX_PORT=10050
 ENV MEDIASOUP_ANNOUNCED_IP=127.0.0.1
 
 EXPOSE 3000
 # Exponer rango de puertos UDP para WebRTC
-EXPOSE 2000-2020/udp
+EXPOSE 10000-10050/udp
 
 CMD ["node", "dist/server.js"]
