@@ -1,0 +1,38 @@
+# fly.toml app configuration file generated for boardwave-backend
+
+app = "boardwave-backend"
+primary_region = "mad" # Madrid (puedes cambiarlo a iad, ams, etc.)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "3000"
+  # Rango de puertos UDP para Mediasoup (debe coincidir con la sección services.ports)
+  MEDIASOUP_MIN_PORT = "10000"
+  MEDIASOUP_MAX_PORT = "10050" 
+  # Fly inyecta automáticamente FLY_PUBLIC_IP, usaremos un script de inicio o configuraremos la app para leerlo
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 3000
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+# Configuración crucial para Mediasoup (UDP)
+[[services]]
+  protocol = "udp"
+  internal_port = 10000
+  processes = ["app"]
+
+  [[services.ports]]
+    port = "10000-10050"
+    handlers = []
