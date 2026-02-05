@@ -54,6 +54,7 @@ export const useAuthStore = create<AuthState>()(
       register: async (username, password) => {
         set({ isLoading: true, error: null });
         try {
+          const API_URL = getBackendUrl('http');
           const response = await fetch(`${API_URL}/api/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
