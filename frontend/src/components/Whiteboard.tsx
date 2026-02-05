@@ -5,17 +5,16 @@ import { Trash2, Eraser, Pen } from 'lucide-react';
 
 interface WhiteboardProps {
   roomId: string;
-  username: string;
 }
 
-export default function Whiteboard({ roomId, username }: WhiteboardProps) {
+export default function Whiteboard({ roomId }: WhiteboardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isConnected, setIsConnected] = useState(false);
   
   // Estado local para herramientas
   const [color, setColor] = useState('#000000');
-  const [brushSize, setBrushSize] = useState(2);
+  const [brushSize] = useState(2);
   const [tool, setTool] = useState<'pen' | 'eraser'>('pen');
   
   // Referencias para el estado de dibujo

@@ -87,7 +87,7 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
     const consumerTransport = device.createRecvTransport(recvParams.params);
 
-    consumerTransport.on('connect', ({ dtlsParameters }, callback, errback) => {
+    consumerTransport.on('connect', ({ dtlsParameters }, callback, _errback) => {
         socket.emit('connectTransport', { 
           transportId: consumerTransport.id, 
           dtlsParameters 

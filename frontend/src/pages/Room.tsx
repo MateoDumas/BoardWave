@@ -9,7 +9,7 @@ import Whiteboard from '../components/Whiteboard';
 import { 
   Mic, MicOff, Video, VideoOff, MonitorUp, 
   Users, PhoneOff, Grid3x3, Presentation, Monitor, 
-  MessageSquare, Paperclip, FileText, X, Layout
+  MessageSquare, Paperclip, FileText, Layout
 } from 'lucide-react';
 
 export default function Room() {
