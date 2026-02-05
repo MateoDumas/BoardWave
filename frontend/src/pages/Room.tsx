@@ -225,8 +225,8 @@ export default function Room() {
 
            <div className="flex-1 flex items-center justify-center overflow-hidden bg-white dark:bg-dark-surface rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 relative">
               <div className={`w-full h-full ${viewMode === 'whiteboard' ? 'block' : 'hidden'}`}>
-                <Whiteboard roomId={roomId} username={username} />
-              </div>
+               <Whiteboard roomId={roomId} />
+             </div>
               
               {viewMode === 'grid' && (
                  <div className="w-full h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-start p-4">
