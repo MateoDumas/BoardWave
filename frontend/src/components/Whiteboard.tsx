@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
 import { Trash2, Eraser, Pen } from 'lucide-react';
+import { getBackendUrl } from '../utils/url';
 
 interface WhiteboardProps {
   roomId: string;
@@ -36,17 +37,7 @@ export default function Whiteboard({ roomId }: WhiteboardProps) {
 
     // 2. Conectar provider (WebSocket)
     // Conectamos a /yjs/ROOM_ID
-    const getBaseUrl = () => {
-      if (typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search);
-        const backendParam = params.get('backend');
-        if (backendParam) {
-          return backendParam.replace(/^http/, 'ws');
-        }
-      }
-      return import.meta.env.VITE_WS_URL || 'ws://localhost:3000';
-    };
-    const baseUrl = getBaseUrl();
+    const baseUrl = getBackendUrl('ws');
     const wsUrl = `${baseUrl}/yjs/${roomId}`;
     const provider = new WebsocketProvider(wsUrl, roomId, ydoc);
     providerRef.current = provider;
