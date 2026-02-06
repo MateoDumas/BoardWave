@@ -4,9 +4,10 @@ interface LogoProps {
   className?: string;
   size?: number;
   showText?: boolean;
+  textColor?: string;
 }
 
-export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText = true }) => {
+export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText = true, textColor }) => {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <svg
@@ -43,10 +44,10 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText 
 
         {/* The Wave - Dynamic Pulse */}
         <path
-          d="M 25 50 
-             Q 35 25, 45 50 
-             T 65 50 
-             T 85 50"
+          d="M 28 50 
+             Q 36 25, 44 50 
+             T 60 50 
+             T 76 50"
           stroke="url(#waveGradient)"
           strokeWidth="8"
           strokeLinecap="round"
@@ -58,24 +59,24 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText 
             dur="3s"
             repeatCount="indefinite"
             values="
-              M 25 50 Q 35 25, 45 50 T 65 50 T 85 50;
-              M 25 50 Q 35 75, 45 50 T 65 50 T 85 50;
-              M 25 50 Q 35 25, 45 50 T 65 50 T 85 50
+              M 28 50 Q 36 25, 44 50 T 60 50 T 76 50;
+              M 28 50 Q 36 75, 44 50 T 60 50 T 76 50;
+              M 28 50 Q 36 25, 44 50 T 60 50 T 76 50
             "
           />
         </path>
 
         {/* Small dots representing particles/data */}
-        <circle cx="75" cy="35" r="4" fill="#00C6FF" opacity="0.8">
+        <circle cx="68" cy="35" r="4" fill="#00C6FF" opacity="0.8">
            <animate attributeName="cy" values="35;30;35" dur="2s" repeatCount="indefinite" />
         </circle>
-        <circle cx="35" cy="65" r="3" fill="#1A73E8" opacity="0.6">
+        <circle cx="36" cy="65" r="3" fill="#1A73E8" opacity="0.6">
            <animate attributeName="cy" values="65;70;65" dur="2.5s" repeatCount="indefinite" />
         </circle>
       </svg>
       
       {showText && (
-        <span className={`font-bold tracking-tight text-gray-900 dark:text-white`} style={{ fontSize: size * 0.7 }}>
+        <span className={`font-bold tracking-tight ${textColor || 'text-gray-900 dark:text-white'}`} style={{ fontSize: size * 0.7 }}>
           Board<span className="text-primary">Wave</span>
         </span>
       )}

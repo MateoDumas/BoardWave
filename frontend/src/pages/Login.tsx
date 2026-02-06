@@ -28,7 +28,7 @@ export const Login = () => {
 
       <div className="relative bg-white/80 dark:bg-dark-surface/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/20 dark:border-gray-700/50">
         <div className="flex flex-col items-center mb-10">
-          <div className="mb-6 p-4 bg-white dark:bg-dark-bg rounded-2xl shadow-lg shadow-blue-500/10">
+          <div className="mb-6 p-4 bg-white dark:bg-dark rounded-2xl shadow-lg shadow-blue-500/10">
             <Logo size={50} />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Bienvenido</h1>
