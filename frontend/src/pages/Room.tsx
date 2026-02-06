@@ -190,8 +190,9 @@ export default function Room() {
           )}
         </div>
         <div className="flex items-center gap-4">
-          <div className="text-sm text-secondary dark:text-gray-400">
+          <div className="text-sm text-secondary dark:text-gray-400 flex items-center gap-2">
             Tú: <span className="font-semibold text-gray-900 dark:text-white">{username}</span>
+            {isHost && <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 px-2 py-0.5 rounded-full border border-yellow-200/50 dark:border-yellow-800/30">Anfitrión</span>}
           </div>
           <div className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-900/20 text-success rounded-full text-sm backdrop-blur-sm border border-green-100/50 dark:border-green-800/30">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
@@ -295,8 +296,9 @@ export default function Room() {
                            ) : (
                               <div className="w-full h-full flex items-center justify-center bg-gray-800">
                                 <Avatar name={peer.username} color={peer.color} size="lg" className="text-2xl w-20 h-20" />
-                                <div className="absolute bottom-4 left-4 text-white font-medium bg-black/50 px-3 py-1 rounded-lg">
+                                <div className="absolute bottom-4 left-4 text-white font-medium bg-black/50 px-3 py-1 rounded-lg flex items-center gap-2">
                                   {peer.username} {isMe && '(Tú)'}
+                                  {peer.isHost && <span className="text-xs bg-yellow-500 text-black px-1.5 rounded-full" title="Anfitrión">★</span>}
                                 </div>
                               </div>
                            )}
