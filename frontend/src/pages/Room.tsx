@@ -70,8 +70,10 @@ export default function Room() {
   }, [messages, activeTab]);
 
   useEffect(() => {
-    connect();
-  }, [connect]);
+    if (hasChosenMode) {
+      connect();
+    }
+  }, [connect, hasChosenMode]);
 
   useEffect(() => {
     if (isConnected && roomId && !joined) {
@@ -162,6 +164,55 @@ export default function Room() {
   };
 
   if (!roomId) return <div>Error: No Room ID</div>;
+
+  if (!hasChosenMode) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-[#202124] text-gray-900 dark:text-white relative overflow-hidden transition-colors duration-500">
+        {/* Background Effects */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 animate-blob" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
+        </div>
+
+        <div className="z-10 bg-white/60 dark:bg-dark-surface/60 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-white/20 dark:border-white/10 max-w-md w-full mx-4 text-center">
+          <h1 className="text-3xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">Bienvenido a BoardWave</h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-8">
+            Estás a punto de unirte a la sala <span className="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-sm">{roomId}</span>
+          </p>
+
+          <div className="space-y-4">
+            <button
+              onClick={() => navigate('/register')}
+              className="w-full py-3 px-4 bg-primary hover:bg-blue-700 text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+            >
+              <Users size={20} />
+              Crear cuenta para unirme
+            </button>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white/0 dark:bg-dark-surface/0 text-gray-500 backdrop-blur-sm">o</span>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setHasChosenMode(true)}
+              className="w-full py-3 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-medium transition-all flex items-center justify-center gap-2"
+            >
+              Continuar como invitado
+            </button>
+          </div>
+          
+          <p className="mt-6 text-xs text-gray-500 dark:text-gray-400">
+            Como invitado, se te asignará un nombre aleatorio.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 dark:bg-[#202124] text-gray-900 dark:text-white overflow-hidden relative transition-colors duration-500">
