@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../services/authStore';
 import { Logo } from '../components/Logo';
-import { User, Lock, ArrowRight, UserPlus } from 'lucide-react';
+import { User, Lock, UserPlus } from 'lucide-react';
 
 export const Register = () => {
   const [username, setUsername] = useState('');
