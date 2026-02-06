@@ -1,10 +1,9 @@
 export const getBackendUrl = (type: 'http' | 'ws' = 'http'): string => {
-  const AWS_IP = import.meta.env.VITE_API_URL || 'https://18.118.47.248.sslip.io'; // HTTPS Automático con sslip.io
+  // FORCE AWS IP for debugging
+  const AWS_IP = 'https://3.14.67.217.sslip.io';
   
   if (type === 'ws') {
-    return AWS_IP.replace(/^http/, 'ws').replace(/^https/, 'wss');
+    return AWS_IP.replace(/^https?/, (match) => match === 'https' ? 'wss' : 'ws');
   }
-  
-  console.log('🔗 BoardWave Backend URL:', AWS_IP);
   return AWS_IP;
 };

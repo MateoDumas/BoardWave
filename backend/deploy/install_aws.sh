@@ -21,6 +21,18 @@ else
     echo "Gestor de paquetes no soportado. Continuando con riesgos..."
 fi
 
+echo -e "${GREEN}[1.5/5] Configurando SWAP (Memoria Virtual)...${NC}"
+if [ ! -f /swapfile ]; then
+    sudo fallocate -l 2G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+    echo "SWAP de 2GB creada correctamente."
+else
+    echo "SWAP ya existe."
+fi
+
 # 2. Instalar Docker y Docker Compose
 echo -e "${GREEN}[2/5] Instalando Docker...${NC}"
 if ! command -v docker &> /dev/null; then

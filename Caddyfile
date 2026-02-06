@@ -2,6 +2,6 @@
     email mateo.dumas@example.com
 }
 
-18.118.47.248.sslip.io {
+{$PUBLIC_IP}.sslip.io {
     reverse_proxy app:3000
 }
