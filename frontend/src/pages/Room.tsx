@@ -277,6 +277,7 @@ export default function Room() {
                     {peers.map(peer => {
                       const isMe = peer.username === username;
                       const isPeerHost = peer.socketId === hostId;
+                      // eslint-disable-next-line @typescript-eslint/no-unused-vars
                       const hasLocalVideo = isMe && localStream && producers.has('video') && !producers.get('video')?.paused;
                       
                       const videoConsumer = !isMe ? Array.from(consumers.values()).find(
