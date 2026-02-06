@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../services/authStore';
+import { Logo } from '../components/Logo';
 
 export const Register = () => {
   const [username, setUsername] = useState('');
@@ -19,6 +20,9 @@ export const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg p-4">
       <div className="bg-white dark:bg-dark-surface p-8 rounded-2xl shadow-lg w-full max-w-md border border-gray-100 dark:border-gray-700">
+        <div className="flex justify-center mb-8">
+          <Logo size={60} />
+        </div>
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-white">Crear Cuenta</h1>
         
         {error && (
