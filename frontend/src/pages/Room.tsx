@@ -36,7 +36,8 @@ export default function Room() {
       ? { stream: localScreenStream, username: 'Tú' } 
       : (screenConsumer ? { track: screenConsumer.track, username: 'Presentador' } : null);
 
-  const isHost = peers.find(p => p.socketId === socket?.id)?.isHost;
+  const hostId = peers.find(p => p.isHost)?.socketId || peers[0]?.socketId;
+  const isHost = hostId && socket?.id ? hostId === socket.id : false;
 
   const handleCopyInvite = () => {
     const url = window.location.href;
@@ -275,6 +276,7 @@ export default function Room() {
                  <div className="w-full h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-start p-4">
                     {peers.map(peer => {
                       const isMe = peer.username === username;
+                      const isPeerHost = peer.socketId === hostId;
                       const hasLocalVideo = isMe && localStream && producers.has('video') && !producers.get('video')?.paused;
                       
                       const videoConsumer = !isMe ? Array.from(consumers.values()).find(
@@ -298,7 +300,7 @@ export default function Room() {
                                 <Avatar name={peer.username} color={peer.color} size="lg" className="text-2xl w-20 h-20" />
                                 <div className="absolute bottom-4 left-4 text-white font-medium bg-black/50 px-3 py-1 rounded-lg flex items-center gap-2">
                                   {peer.username} {isMe && '(Tú)'}
-                                  {peer.isHost && <span className="text-xs bg-yellow-500 text-black px-1.5 rounded-full" title="Anfitrión">★</span>}
+                                  {isPeerHost && <span className="text-xs bg-yellow-500 text-black px-1.5 rounded-full" title="Anfitrión">★</span>}
                                 </div>
                               </div>
                            )}
