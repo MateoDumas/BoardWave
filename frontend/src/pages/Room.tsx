@@ -11,7 +11,7 @@ import {
   Mic, MicOff, Video, VideoOff, MonitorUp, 
   Users, PhoneOff, Grid3x3, Presentation, Monitor, 
   MessageSquare, Paperclip, FileText, Layout,
-  Link as LinkIcon, Check, UserPlus
+  Link as LinkIcon, Check
 } from 'lucide-react';
 
 export default function Room() {

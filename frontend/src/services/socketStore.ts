@@ -4,10 +4,11 @@ import { getBackendUrl } from '../utils/url';
 
 const SERVER_URL = getBackendUrl('http');
 
-interface User {
+export interface User {
   socketId: string;
   username: string;
   color?: string;
+  isHost?: boolean;
 }
 
 export interface ChatMessage {
