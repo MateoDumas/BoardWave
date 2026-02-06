@@ -10,7 +10,8 @@ import { soundService } from '../services/sound';
 import { 
   Mic, MicOff, Video, VideoOff, MonitorUp, 
   Users, PhoneOff, Grid3x3, Presentation, Monitor, 
-  MessageSquare, Paperclip, FileText, Layout
+  MessageSquare, Paperclip, FileText, Layout,
+  Link as LinkIcon, Check, UserPlus
 } from 'lucide-react';
 
 export default function Room() {
@@ -26,6 +27,7 @@ export default function Room() {
   const [viewMode, setViewMode] = useState<'grid' | 'whiteboard' | 'screen'>('grid');
   const [showSidebar, setShowSidebar] = useState(true);
   const [messageInput, setMessageInput] = useState('');
+  const [copied, setCopied] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const prevPeersLength = useRef(0);
 
@@ -33,6 +35,15 @@ export default function Room() {
   const activeScreenShare = localScreenStream 
       ? { stream: localScreenStream, username: 'Tú' } 
       : (screenConsumer ? { track: screenConsumer.track, username: 'Presentador' } : null);
+
+  const isHost = peers.find(p => p.socketId === socket?.id)?.isHost;
+
+  const handleCopyInvite = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     if (activeScreenShare) {
@@ -166,6 +177,17 @@ export default function Room() {
           <span className="px-3 py-1 bg-gray-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-full text-sm font-medium border border-gray-200/50 dark:border-gray-600/50">
             Sala: {roomId}
           </span>
+          
+          {isHost && (
+            <button 
+              onClick={handleCopyInvite}
+              className="flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors border border-blue-200/50 dark:border-blue-800/30"
+              title="Copiar enlace de invitación"
+            >
+              {copied ? <Check size={14} /> : <LinkIcon size={14} />}
+              {copied ? 'Copiado' : 'Invitar'}
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <div className="text-sm text-secondary dark:text-gray-400">

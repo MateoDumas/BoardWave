@@ -29,6 +29,8 @@ interface RoomUser {
   socketId: string;
   username: string;
   color?: string;
+  joinedAt: number;
+  isHost: boolean;
 }
 
 interface PeerState {
@@ -70,7 +72,19 @@ io.on('connection', (socket: Socket) => {
     console.log(`[Socket.IO] User ${username} (${socket.id}) joining room ${roomId}`);
     
     socket.join(roomId);
-    users.set(socket.id, { socketId: socket.id, username, color });
+    
+    // Determine if this is the first user in the room
+    const isFirstUser = !rooms.has(roomId) || rooms.get(roomId)?.size === 0;
+    
+    const newUser: RoomUser = {
+      socketId: socket.id,
+      username,
+      color,
+      joinedAt: Date.now(),
+      isHost: isFirstUser
+    };
+
+    users.set(socket.id, newUser);
     
     if (!rooms.has(roomId)) {
       rooms.set(roomId, new Set());
@@ -87,9 +101,9 @@ io.on('connection', (socket: Socket) => {
     }
     rooms.get(roomId)?.add(socket.id);
 
-    socket.to(roomId).emit('user-joined', { socketId: socket.id, username, color });
+    socket.to(roomId).emit('user-joined', newUser);
 
-    const roomUsers = Array.from(rooms.get(roomId) || []).map(id => users.get(id)).filter(Boolean);
+    const roomUsers = Array.from(rooms.get(roomId) || []).map(id => users.get(id)).filter(Boolean) as RoomUser[];
     if (callback) callback({ peers: roomUsers });
   });
 
@@ -260,12 +274,30 @@ io.on('connection', (socket: Socket) => {
       rooms.forEach((participants, roomId) => {
         if (participants.has(socket.id)) {
           participants.delete(socket.id);
+          
           if (participants.size === 0) {
             rooms.delete(roomId);
             const router = roomRouters.get(roomId);
             router?.close();
             roomRouters.delete(roomId);
           } else {
+            // Handle Host Migration
+            if (user.isHost) {
+              const remainingUsers = Array.from(participants)
+                .map(id => users.get(id))
+                .filter((u): u is RoomUser => !!u)
+                .sort((a, b) => a.joinedAt - b.joinedAt);
+              
+              if (remainingUsers.length > 0) {
+                const newHost = remainingUsers[0];
+                newHost.isHost = true;
+                users.set(newHost.socketId, newHost);
+                
+                console.log(`[Socket.IO] Host migrated to ${newHost.username} (${newHost.socketId}) in room ${roomId}`);
+                io.to(roomId).emit('host-updated', { newHostSocketId: newHost.socketId });
+              }
+            }
+
             io.to(roomId).emit('user-left', { socketId: socket.id });
           }
         }

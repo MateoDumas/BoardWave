@@ -77,6 +77,15 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       }));
     });
 
+    socket.on('host-updated', ({ newHostSocketId }: { newHostSocketId: string }) => {
+      console.log('Host updated:', newHostSocketId);
+      set((state) => ({
+        peers: state.peers.map(p => 
+          p.socketId === newHostSocketId ? { ...p, isHost: true } : { ...p, isHost: false }
+        )
+      }));
+    });
+
     set({ socket });
   },
 
