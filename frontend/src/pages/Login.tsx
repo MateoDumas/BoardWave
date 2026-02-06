@@ -19,55 +19,56 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 dark:from-dark-bg dark:to-gray-900 p-4 transition-colors duration-500">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-400/10 blur-[100px]" />
-        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[40%] rounded-full bg-cyan-400/10 blur-[100px]" />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg p-4 relative overflow-hidden transition-colors duration-500">
+      {/* Dynamic Animated Background */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000" />
+        <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
       </div>
 
-      <div className="relative bg-white/80 dark:bg-dark-surface/90 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-full max-w-md border border-white/20 dark:border-gray-700/50">
+      <div className="relative z-10 bg-white/70 dark:bg-dark-surface/60 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 dark:border-white/5 w-full max-w-md animate-slide-up">
         <div className="flex flex-col items-center mb-10">
-          <Logo size={60} className="mb-6 drop-shadow-2xl" />
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Bienvenido</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">Inicia sesión para continuar</p>
+          <Logo size={70} className="mb-6 drop-shadow-lg transform hover:scale-105 transition-transform duration-300" />
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 tracking-tight">Bienvenido</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-3 font-medium">Inicia sesión para continuar</p>
         </div>
         
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-300 px-4 py-3 rounded-xl mb-6 text-sm flex items-center animate-fade-in">
+          <div className="bg-red-50/80 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-600 dark:text-red-300 px-4 py-3 rounded-xl mb-6 text-sm flex items-center animate-fade-in backdrop-blur-sm">
             <span className="mr-2">⚠️</span> {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Usuario</label>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-1.5 group">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-primary">Usuario</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors duration-300">
                 <User size={20} />
               </div>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none"
+                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300 outline-none backdrop-blur-sm"
                 placeholder="Ingresa tu usuario"
                 required
               />
             </div>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Contraseña</label>
-            <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+          <div className="space-y-1.5 group">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-primary">Contraseña</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors duration-300">
                 <Lock size={20} />
               </div>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 outline-none"
+                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300 outline-none backdrop-blur-sm"
                 placeholder="••••••••"
                 required
               />
@@ -77,14 +78,15 @@ export const Login = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3.5 bg-gradient-to-r from-primary to-blue-600 text-white rounded-xl font-semibold hover:shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-2"
+            className="w-full py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-2xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group mt-4 relative overflow-hidden"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
-                Entrar
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <span className="relative z-10">Entrar</span>
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform relative z-10" />
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
               </>
             )}
           </button>
@@ -92,7 +94,7 @@ export const Login = () => {
 
         <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
           ¿No tienes cuenta?{' '}
-          <Link to="/register" className="text-primary hover:text-blue-600 font-semibold hover:underline transition-colors">
+          <Link to="/register" className="text-primary hover:text-cyan-500 font-bold hover:underline transition-all">
             Regístrate aquí
           </Link>
         </p>
