@@ -19,7 +19,7 @@ export const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg p-4 relative overflow-hidden transition-colors duration-500">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark p-4 relative overflow-hidden transition-colors duration-500">
       {/* Dynamic Animated Background */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob" />
