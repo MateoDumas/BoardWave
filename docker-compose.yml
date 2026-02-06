@@ -32,30 +32,30 @@ services:
       - MEDIASOUP_MIN_PORT=10000
       - MEDIASOUP_MAX_PORT=10050
       - MEDIASOUP_ANNOUNCED_IP=${PUBLIC_IP:-127.0.0.1}
-      - DATABASE_URL=postgres://postgres:password@db:5432/boardwave
+      # - DATABASE_URL=postgres://postgres:password@db:5432/boardwave
       - JWT_SECRET=${JWT_SECRET:-changeme}
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     networks:
       - boardwave-net
 
-  db:
-    image: postgres:15-alpine
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=boardwave
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - boardwave-net
+  # db:
+  #   image: postgres:15-alpine
+  #   restart: always
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=boardwave
+  #     - POSTGRES_HOST_AUTH_METHOD=trust
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+  #   networks:
+  #     - boardwave-net
 
 volumes:
-  db_data:
+  # db_data:
   caddy_data:
   caddy_config:
 
