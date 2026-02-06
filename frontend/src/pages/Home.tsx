@@ -57,14 +57,14 @@ export const Home = () => {
       <div className="relative z-10 w-full max-w-4xl flex flex-col items-center text-center animate-slide-up">
         
         <div className="mb-8 transform hover:scale-105 transition-transform duration-500">
-           <Logo size={90} />
+           <Logo size={90} textColor="text-gray-900 dark:text-white" />
         </div>
 
         <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-500 mb-6 tracking-tight drop-shadow-sm">
           Colabora sin límites
         </h1>
         
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl leading-relaxed">
+        <p className="text-xl text-gray-700 dark:text-gray-200 mb-12 max-w-2xl leading-relaxed font-medium">
           Videoconferencias instantáneas, pizarra colaborativa y chat en tiempo real. 
           Todo en un solo lugar, sin complicaciones.
         </p>
@@ -85,7 +85,7 @@ export const Home = () => {
           
           {/* Join Room Form */}
           <form onSubmit={joinRoom} className="flex-1 relative group">
-             <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+             <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-600 transition-colors">
                 <Keyboard size={24} />
              </div>
              <input
@@ -93,7 +93,7 @@ export const Home = () => {
                 placeholder="Código de reunión"
                 value={joinId}
                 onChange={(e) => setJoinId(e.target.value)}
-                className="w-full h-full py-5 pl-14 pr-24 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-3xl text-gray-900 dark:text-white placeholder-gray-500 shadow-lg focus:ring-4 focus:ring-primary/20 focus:border-primary transition-all outline-none text-lg"
+                className="w-full h-full py-5 pl-14 pr-24 bg-white dark:bg-dark-surface border border-gray-200 dark:border-gray-700 rounded-3xl text-gray-900 dark:text-white placeholder-gray-500 shadow-lg focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 transition-all outline-none text-lg"
              />
              <button 
                type="submit"

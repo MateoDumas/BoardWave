@@ -42,16 +42,16 @@ export const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-1.5 group">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-primary">Usuario</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-blue-600">Usuario</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors duration-300">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-600 transition-colors duration-300">
                 <User size={20} />
               </div>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300 outline-none backdrop-blur-sm"
+                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 transition-all duration-300 outline-none"
                 placeholder="Ingresa tu usuario"
                 required
               />
@@ -59,16 +59,16 @@ export const Login = () => {
           </div>
 
           <div className="space-y-1.5 group">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-primary">Contraseña</label>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1 transition-colors group-focus-within:text-blue-600">Contraseña</label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors duration-300">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-blue-600 transition-colors duration-300">
                 <Lock size={20} />
               </div>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/50 dark:bg-gray-800/50 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all duration-300 outline-none backdrop-blur-sm"
+                className="w-full pl-11 pr-4 py-4 rounded-2xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/30 focus:border-blue-500 transition-all duration-300 outline-none"
                 placeholder="••••••••"
                 required
               />
