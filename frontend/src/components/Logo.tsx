@@ -44,10 +44,10 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText 
 
         {/* The Wave - Dynamic Pulse */}
         <path
-          d="M 28 50 
-             Q 36 25, 44 50 
-             T 60 50 
-             T 76 50"
+          d="M 32 50 
+             Q 38 30, 46 50 
+             T 58 50 
+             T 70 50"
           stroke="url(#waveGradient)"
           strokeWidth="8"
           strokeLinecap="round"
@@ -59,19 +59,19 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 40, showText 
             dur="3s"
             repeatCount="indefinite"
             values="
-              M 28 50 Q 36 25, 44 50 T 60 50 T 76 50;
-              M 28 50 Q 36 75, 44 50 T 60 50 T 76 50;
-              M 28 50 Q 36 25, 44 50 T 60 50 T 76 50
+              M 32 50 Q 38 30, 46 50 T 58 50 T 70 50;
+              M 32 50 Q 38 70, 46 50 T 58 50 T 70 50;
+              M 32 50 Q 38 30, 46 50 T 58 50 T 70 50
             "
           />
         </path>
 
         {/* Small dots representing particles/data */}
-        <circle cx="68" cy="35" r="4" fill="#00C6FF" opacity="0.8">
-           <animate attributeName="cy" values="35;30;35" dur="2s" repeatCount="indefinite" />
+        <circle cx="62" cy="38" r="4" fill="#00C6FF" opacity="0.8">
+           <animate attributeName="cy" values="38;34;38" dur="2s" repeatCount="indefinite" />
         </circle>
-        <circle cx="36" cy="65" r="3" fill="#1A73E8" opacity="0.6">
-           <animate attributeName="cy" values="65;70;65" dur="2.5s" repeatCount="indefinite" />
+        <circle cx="38" cy="62" r="3" fill="#1A73E8" opacity="0.6">
+           <animate attributeName="cy" values="62;66;62" dur="2.5s" repeatCount="indefinite" />
         </circle>
       </svg>
       
