@@ -152,11 +152,11 @@ export default function Room() {
   if (!roomId) return <div>Error: No Room ID</div>;
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50 dark:bg-dark text-gray-900 dark:text-white overflow-hidden relative transition-colors duration-500">
+    <div className="h-screen flex flex-col bg-gray-50 dark:bg-[#202124] text-gray-900 dark:text-white overflow-hidden relative transition-colors duration-500">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 animate-blob" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
       </div>
 
       {/* Navbar Glass */}
