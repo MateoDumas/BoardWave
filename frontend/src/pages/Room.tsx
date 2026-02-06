@@ -6,6 +6,7 @@ import { useAuthStore } from '../services/authStore';
 import { Avatar } from '../components/Avatar';
 import VideoPlayer from '../components/VideoPlayer';
 import Whiteboard from '../components/Whiteboard';
+import { soundService } from '../services/sound';
 import { 
   Mic, MicOff, Video, VideoOff, MonitorUp, 
   Users, PhoneOff, Grid3x3, Presentation, Monitor, 
@@ -26,6 +27,7 @@ export default function Room() {
   const [showSidebar, setShowSidebar] = useState(true);
   const [messageInput, setMessageInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const prevPeersLength = useRef(0);
 
   const screenConsumer = Array.from(consumers.values()).find(c => c.appData.source === 'screen');
   const activeScreenShare = localScreenStream 
@@ -37,6 +39,17 @@ export default function Room() {
         setViewMode('screen');
     }
   }, [!!activeScreenShare]);
+
+  useEffect(() => {
+    if (peers.length > prevPeersLength.current) {
+      soundService.playJoin();
+    } else if (peers.length < prevPeersLength.current) {
+      if (isConnected) {
+        soundService.playLeave();
+      }
+    }
+    prevPeersLength.current = peers.length;
+  }, [peers.length, isConnected]);
 
   useEffect(() => {
     if (activeTab === 'chat') {
@@ -87,6 +100,7 @@ export default function Room() {
   };
 
   const handleLeaveRoom = () => {
+    soundService.playLeave();
     closeMedia();
     disconnectSocket();
     navigate('/');
@@ -138,12 +152,18 @@ export default function Room() {
   if (!roomId) return <div>Error: No Room ID</div>;
 
   return (
-    <div className="h-screen flex flex-col bg-surface dark:bg-dark text-gray-900 dark:text-white">
-      {/* Navbar Simple */}
-      <div className="h-16 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-gray-700 flex items-center px-6 justify-between">
+    <div className="h-screen flex flex-col bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-white overflow-hidden relative transition-colors duration-500">
+      {/* Background Effects */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-400/20 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000" />
+      </div>
+
+      {/* Navbar Glass */}
+      <div className="h-16 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-md border-b border-white/20 dark:border-white/10 flex items-center px-6 justify-between z-30 shadow-sm relative">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-primary">BoardWave</h1>
-          <span className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-sm font-medium">
+          <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">BoardWave</h1>
+          <span className="px-3 py-1 bg-gray-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-full text-sm font-medium border border-gray-200/50 dark:border-gray-600/50">
             Sala: {roomId}
           </span>
         </div>
@@ -151,7 +171,7 @@ export default function Room() {
           <div className="text-sm text-secondary dark:text-gray-400">
             Tú: <span className="font-semibold text-gray-900 dark:text-white">{username}</span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-50 dark:bg-green-900/20 text-success rounded-full text-sm">
+          <div className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-900/20 text-success rounded-full text-sm backdrop-blur-sm border border-green-100/50 dark:border-green-800/30">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
             {peers.length + 1} Conectados
           </div>
@@ -159,9 +179,9 @@ export default function Room() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Left Sidebar Controls */}
-        <div className="w-20 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-gray-700 flex flex-col items-center py-6 gap-6 z-20 shadow-lg">
+      <div className="flex-1 flex overflow-hidden z-20 relative">
+        {/* Left Sidebar Controls Glass */}
+        <div className="w-20 bg-white/60 dark:bg-dark-surface/60 backdrop-blur-md border-r border-white/20 dark:border-white/10 flex flex-col items-center py-6 gap-6 z-20 shadow-lg transition-all">
              <button 
                 onClick={handleToggleAudio}
                 title="Alternar Audio"
@@ -201,29 +221,29 @@ export default function Room() {
         </div>
 
         {/* Pizarra / Screen Share Area */}
-        <div className="flex-1 bg-surface dark:bg-dark p-4 flex flex-col relative overflow-hidden">
+        <div className="flex-1 bg-transparent p-4 flex flex-col relative overflow-hidden">
            {/* View Mode Tabs (if screen share active) */}
            <div className="absolute top-4 left-4 z-10 flex gap-2">
              <button 
                onClick={() => setViewMode('grid')}
-               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50'}`}>
+               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
                <Grid3x3 size={16} /> Grid
              </button>
              <button 
                onClick={() => setViewMode('whiteboard')}
-               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 ${viewMode === 'whiteboard' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50'}`}>
+               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'whiteboard' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
                <Presentation size={16} /> Pizarra
              </button>
              {activeScreenShare && (
                <button 
                  onClick={() => setViewMode('screen')}
-                 className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 ${viewMode === 'screen' ? 'bg-primary text-white' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:bg-gray-50'}`}>
+                 className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'screen' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
                  <Monitor size={16} /> Pantalla
                </button>
              )}
            </div>
 
-           <div className="flex-1 flex items-center justify-center overflow-hidden bg-white dark:bg-dark-surface rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 relative">
+           <div className="flex-1 flex items-center justify-center overflow-hidden bg-white/40 dark:bg-dark-surface/40 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:border-white/10 relative">
               <div className={`w-full h-full ${viewMode === 'whiteboard' ? 'block' : 'hidden'}`}>
                <Whiteboard roomId={roomId} />
              </div>
@@ -283,11 +303,11 @@ export default function Room() {
         </div>
 
         {/* Sidebar (Videos/Chat) */}
-        <div className={`transition-all duration-300 ease-in-out border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-surface flex flex-col ${showSidebar ? 'w-80 translate-x-0' : 'w-0 translate-x-full overflow-hidden opacity-0'}`}>
+        <div className={`transition-all duration-300 ease-in-out border-l border-white/20 dark:border-white/10 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-md flex flex-col ${showSidebar ? 'w-80 translate-x-0' : 'w-0 translate-x-full overflow-hidden opacity-0'}`}>
           
           <div className="p-4 flex flex-col h-full gap-4">
              {/* Tabs */}
-             <div className="flex bg-gray-100 dark:bg-gray-800 rounded-xl p-1 shrink-0">
+             <div className="flex bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-1 shrink-0">
                <button
                  onClick={() => setActiveTab('participants')}
                  className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'participants' ? 'bg-white text-primary shadow-sm dark:bg-gray-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
