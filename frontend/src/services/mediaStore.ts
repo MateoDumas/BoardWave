@@ -99,15 +99,18 @@ export const useMediaStore = create<MediaState>((set, get) => ({
 
   produce: async (type: 'audio' | 'video' | 'screen') => {
     const { device, producerTransport, producers, localStream } = get();
-    if (!device || !producerTransport) return;
+    if (!device || !producerTransport) {
+        console.error('Device not initialized. Wait for connection.');
+        return;
+    }
 
     try {
-      let stream: MediaStream | null = null;
-      let track: MediaStreamTrack;
+      let track: MediaStreamTrack | undefined;
+      let currentStream = localStream;
 
       if (type === 'screen') {
         try {
-            stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
+            const stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
             track = stream.getVideoTracks()[0];
             set({ localScreenStream: stream });
         } catch (err) {
@@ -115,16 +118,45 @@ export const useMediaStore = create<MediaState>((set, get) => ({
             return;
         }
       } else {
-          stream = localStream;
-          if (!stream) {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: true, 
-                video: true 
-            });
-            set({ localStream: stream });
+          // Check if we already have the track in current stream
+          if (currentStream) {
+              const tracks = type === 'video' ? currentStream.getVideoTracks() : currentStream.getAudioTracks();
+              if (tracks.length > 0) {
+                  track = tracks[0];
+                  // If track is disabled/stopped, we might need to get a new one? 
+                  // Usually user just wants to unmute. But if stopped, we need new gum.
+                  if (track.readyState === 'ended') {
+                      track = undefined;
+                  }
+              }
           }
-          track = type === 'video' ? stream.getVideoTracks()[0] : stream.getAudioTracks()[0];
+
+          if (!track) {
+              try {
+                  const constraints = {
+                      audio: type === 'audio',
+                      video: type === 'video'
+                  };
+                  
+                  console.log(`Requesting ${type} access...`);
+                  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                  track = type === 'video' ? stream.getVideoTracks()[0] : stream.getAudioTracks()[0];
+                  
+                  if (!currentStream) {
+                      currentStream = new MediaStream();
+                  }
+                  currentStream.addTrack(track);
+                  set({ localStream: currentStream });
+                  
+              } catch (err) {
+                  console.error(`Failed to get ${type} stream:`, err);
+                  alert(`No se pudo acceder a ${type === 'video' ? 'la cámara' : 'el micrófono'}. Verifique que no esté en uso por otra aplicación.`);
+                  return;
+              }
+          }
       }
+
+      if (!track) return;
 
       const params = { 
           track,
@@ -144,10 +176,20 @@ export const useMediaStore = create<MediaState>((set, get) => ({
               currentProducers.delete('screen');
               set({ producers: currentProducers, localScreenStream: null });
           };
+      } else {
+          // Handle track ended (e.g. user revoked permission or device unplugged)
+          track.onended = () => {
+              console.log(`${type} track ended`);
+              producer.close();
+              const currentProducers = new Map(get().producers);
+              currentProducers.delete(type);
+              set({ producers: currentProducers });
+          };
       }
 
     } catch (err) {
       console.error('Produce error:', err);
+      alert('Error al iniciar transmisión. Intente recargar la página.');
     }
   },
 
