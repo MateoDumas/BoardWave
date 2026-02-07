@@ -5,6 +5,7 @@ import { useMediaStore } from '../services/mediaStore';
 import { useAuthStore } from '../services/authStore';
 import { Avatar } from '../components/Avatar';
 import VideoPlayer from '../components/VideoPlayer';
+import AudioPlayer from '../components/AudioPlayer';
 import Whiteboard from '../components/Whiteboard';
 import { soundService } from '../services/sound';
 import { 
