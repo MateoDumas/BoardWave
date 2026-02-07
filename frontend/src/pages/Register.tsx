@@ -27,11 +27,11 @@ export const Register = () => {
         <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-400/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-3xl opacity-70 animate-blob animation-delay-4000" />
       </div>
 
-      <div className="relative z-10 bg-white/70 dark:bg-dark-surface/60 backdrop-blur-xl p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 dark:border-white/5 w-full max-w-md animate-slide-up">
-        <div className="flex flex-col items-center mb-10">
-          <Logo size={70} className="mb-6 drop-shadow-lg transform hover:scale-105 transition-transform duration-300" />
-          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 tracking-tight">Crear Cuenta</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-3 font-medium">Únete a BoardWave hoy mismo</p>
+      <div className="relative z-10 bg-white/70 dark:bg-dark-surface/60 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 dark:border-white/5 w-full max-w-md animate-slide-up mx-4">
+        <div className="flex flex-col items-center mb-8 md:mb-10">
+          <Logo size={60} className="mb-4 md:mb-6 drop-shadow-lg transform hover:scale-105 transition-transform duration-300" />
+          <h1 className="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500 tracking-tight text-center">Crear Cuenta</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-2 md:mt-3 font-medium text-center">Únete a BoardWave hoy mismo</p>
         </div>
         
         {error && (

@@ -11,7 +11,7 @@ import {
   Mic, MicOff, Video, VideoOff, MonitorUp, 
   Users, PhoneOff, Grid3x3, Presentation, Monitor, 
   MessageSquare, Paperclip, FileText, Layout,
-  Link as LinkIcon, Check
+  Link as LinkIcon, Check, Send
 } from 'lucide-react';
 
 export default function Room() {
@@ -22,6 +22,7 @@ export default function Room() {
   const { user } = useAuthStore();
   const username = user?.username || `Guest-${Math.floor(Math.random() * 1000)}`;
   const userColor = user?.color;
+  const [hasChosenMode, setHasChosenMode] = useState(!!user);
   const [joined, setJoined] = useState(false);
   const [activeTab, setActiveTab] = useState<'participants' | 'chat'>('participants');
   const [viewMode, setViewMode] = useState<'grid' | 'whiteboard' | 'screen'>('grid');
@@ -223,108 +224,113 @@ export default function Room() {
       </div>
 
       {/* Navbar Glass */}
-      <div className="h-16 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-md border-b border-white/20 dark:border-white/10 flex items-center px-6 justify-between z-30 shadow-sm relative">
-        <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">BoardWave</h1>
-          <span className="px-3 py-1 bg-gray-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-full text-sm font-medium border border-gray-200/50 dark:border-gray-600/50">
-            Sala: {roomId}
+      <div className="h-14 md:h-16 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-md border-b border-white/20 dark:border-white/10 flex items-center px-4 md:px-6 justify-between z-30 shadow-sm relative shrink-0">
+        <div className="flex items-center gap-2 md:gap-4">
+          <h1 className="text-lg md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-500">
+            <span className="hidden md:inline">BoardWave</span>
+            <span className="md:hidden">BW</span>
+          </h1>
+          <span className="px-2 md:px-3 py-1 bg-gray-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-full text-xs md:text-sm font-medium border border-gray-200/50 dark:border-gray-600/50 truncate max-w-[100px] md:max-w-none">
+            <span className="hidden md:inline">Sala: </span>{roomId}
           </span>
           
           {isHost && (
             <button 
               onClick={handleCopyInvite}
-              className="flex items-center gap-2 px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors border border-blue-200/50 dark:border-blue-800/30"
+              className="flex items-center gap-2 px-2 md:px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs md:text-sm font-medium hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors border border-blue-200/50 dark:border-blue-800/30"
               title="Copiar enlace de invitación"
             >
               {copied ? <Check size={14} /> : <LinkIcon size={14} />}
-              {copied ? 'Copiado' : 'Invitar'}
+              <span className="hidden sm:inline">{copied ? 'Copiado' : 'Invitar'}</span>
             </button>
           )}
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-sm text-secondary dark:text-gray-400 flex items-center gap-2">
-            Tú: <span className="font-semibold text-gray-900 dark:text-white">{username}</span>
-            {isHost && <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 px-2 py-0.5 rounded-full border border-yellow-200/50 dark:border-yellow-800/30">Anfitrión</span>}
+        <div className="flex items-center gap-2 md:gap-4">
+          <div className="text-xs md:text-sm text-secondary dark:text-gray-400 flex items-center gap-2">
+            <span className="hidden sm:inline">Tú:</span>
+            <span className="font-semibold text-gray-900 dark:text-white max-w-[80px] truncate">{username}</span>
+            {isHost && <span className="text-[10px] md:text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-500 px-1.5 md:px-2 py-0.5 rounded-full border border-yellow-200/50 dark:border-yellow-800/30">Host</span>}
           </div>
-          <div className="flex items-center gap-2 px-3 py-1 bg-green-50/80 dark:bg-green-900/20 text-success rounded-full text-sm backdrop-blur-sm border border-green-100/50 dark:border-green-800/30">
+          <div className="flex items-center gap-2 px-2 md:px-3 py-1 bg-green-50/80 dark:bg-green-900/20 text-success rounded-full text-xs md:text-sm backdrop-blur-sm border border-green-100/50 dark:border-green-800/30">
             <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-            {peers.length + 1} Conectados
+            <span className="hidden md:inline">{peers.length + 1} Conectados</span>
+            <span className="md:hidden">{peers.length + 1}</span>
           </div>
         </div>
       </div>
 
       {/* Main Content Grid */}
-      <div className="flex-1 flex overflow-hidden z-20 relative">
-        {/* Left Sidebar Controls Glass */}
-        <div className="w-20 bg-white/60 dark:bg-dark-surface/60 backdrop-blur-md border-r border-white/20 dark:border-white/10 flex flex-col items-center py-6 gap-6 z-20 shadow-lg transition-all">
+      <div className="flex-1 flex flex-col-reverse md:flex-row overflow-hidden z-20 relative">
+        {/* Left Sidebar Controls Glass (Bottom on mobile) */}
+        <div className="w-full md:w-20 h-16 md:h-full bg-white/60 dark:bg-dark-surface/60 backdrop-blur-md border-t md:border-t-0 md:border-r border-white/20 dark:border-white/10 flex flex-row md:flex-col items-center justify-evenly md:justify-start py-2 md:py-6 gap-2 md:gap-6 z-20 shadow-lg transition-all shrink-0">
              <button 
                 onClick={handleToggleAudio}
                 title="Alternar Audio"
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 ${producers.get('audio')?.paused ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600' : (producers.has('audio') ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600')}`}>
-                {producers.has('audio') && !producers.get('audio')?.paused ? <Mic size={20} /> : <MicOff size={20} />}
+                className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-200 ${producers.get('audio')?.paused ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600' : (producers.has('audio') ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600')}`}>
+                {producers.has('audio') && !producers.get('audio')?.paused ? <Mic size={18} /> : <MicOff size={18} />}
              </button>
              <button 
                 onClick={handleToggleVideo}
                 title="Alternar Video"
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 ${producers.get('video')?.paused ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600' : (producers.has('video') ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600')}`}>
-                {producers.has('video') && !producers.get('video')?.paused ? <Video size={20} /> : <VideoOff size={20} />}
+                className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-200 ${producers.get('video')?.paused ? 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600' : (producers.has('video') ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600')}`}>
+                {producers.has('video') && !producers.get('video')?.paused ? <Video size={18} /> : <VideoOff size={18} />}
              </button>
              <button 
                 onClick={handleToggleScreen}
                 title="Compartir Pantalla"
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 ${localScreenStream ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
-                <MonitorUp size={20} />
+                className={`hidden md:flex w-12 h-12 rounded-full items-center justify-center transition-all duration-200 ${localScreenStream ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
+                <MonitorUp size={18} />
              </button>
              
-             <div className="w-8 h-[1px] bg-gray-200 dark:bg-gray-700 my-2"></div>
+             <div className="w-[1px] h-6 md:w-8 md:h-[1px] bg-gray-200 dark:bg-gray-700 my-0 md:my-2"></div>
 
              <button 
                 onClick={() => setShowSidebar(!showSidebar)}
                 title={showSidebar ? "Ocultar Panel" : "Mostrar Panel"}
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-200 ${showSidebar ? 'bg-blue-50 text-primary dark:bg-blue-900/20' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
-                <Layout size={20} />
+                className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-all duration-200 ${showSidebar ? 'bg-blue-50 text-primary dark:bg-blue-900/20' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
+                <Layout size={18} />
              </button>
 
-             <div className="flex-1"></div>
+             <div className="flex-1 hidden md:block"></div>
 
              <button 
                 onClick={handleLeaveRoom}
                 title="Salir de la Sala"
-                className="w-12 h-12 rounded-full bg-danger text-white flex items-center justify-center hover:bg-red-600 transition-all shadow-md mb-4">
-                <PhoneOff size={20} />
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-danger text-white flex items-center justify-center hover:bg-red-600 transition-all shadow-md md:mb-4">
+                <PhoneOff size={18} />
              </button>
         </div>
 
         {/* Pizarra / Screen Share Area */}
-        <div className="flex-1 bg-transparent p-4 flex flex-col relative overflow-hidden">
+        <div className="flex-1 bg-transparent p-2 md:p-4 flex flex-col relative overflow-hidden">
            {/* View Mode Tabs (if screen share active) */}
-           <div className="absolute top-4 left-4 z-10 flex gap-2">
+           <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10 flex gap-2">
              <button 
                onClick={() => setViewMode('grid')}
-               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
-               <Grid3x3 size={16} /> Grid
+               className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium shadow-sm transition-all flex items-center gap-1.5 md:gap-2 backdrop-blur-sm ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
+               <Grid3x3 size={14} className="md:w-4 md:h-4" /> <span className="hidden xs:inline">Grid</span>
              </button>
              <button 
                onClick={() => setViewMode('whiteboard')}
-               className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'whiteboard' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
-               <Presentation size={16} /> Pizarra
+               className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium shadow-sm transition-all flex items-center gap-1.5 md:gap-2 backdrop-blur-sm ${viewMode === 'whiteboard' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
+               <Presentation size={14} className="md:w-4 md:h-4" /> <span className="hidden xs:inline">Pizarra</span>
              </button>
              {activeScreenShare && (
                <button 
                  onClick={() => setViewMode('screen')}
-                 className={`px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-all flex items-center gap-2 backdrop-blur-sm ${viewMode === 'screen' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
-                 <Monitor size={16} /> Pantalla
+                 className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium shadow-sm transition-all flex items-center gap-1.5 md:gap-2 backdrop-blur-sm ${viewMode === 'screen' ? 'bg-primary text-white' : 'bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-700'}`}>
+                 <Monitor size={14} className="md:w-4 md:h-4" /> <span className="hidden xs:inline">Pantalla</span>
                </button>
              )}
            </div>
 
-           <div className="flex-1 flex items-center justify-center overflow-hidden bg-white/40 dark:bg-dark-surface/40 backdrop-blur-sm rounded-3xl shadow-lg border border-white/20 dark:border-white/10 relative">
+           <div className="flex-1 flex items-center justify-center overflow-hidden bg-white/40 dark:bg-dark-surface/40 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-lg border border-white/20 dark:border-white/10 relative">
               <div className={`w-full h-full ${viewMode === 'whiteboard' ? 'block' : 'hidden'}`}>
                <Whiteboard roomId={roomId} />
              </div>
               
               {viewMode === 'grid' && (
-                 <div className="w-full h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 content-start p-4">
+                 <div className="w-full h-full overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 content-start p-2 md:p-4 scrollbar-thin">
                     {peers.map(peer => {
                       const isMe = peer.username === username;
                       const isPeerHost = peer.socketId === hostId;
@@ -349,10 +355,10 @@ export default function Room() {
                               />
                            ) : (
                               <div className="w-full h-full flex items-center justify-center bg-gray-800">
-                                <Avatar name={peer.username} color={peer.color} size="lg" className="text-2xl w-20 h-20" />
-                                <div className="absolute bottom-4 left-4 text-white font-medium bg-black/50 px-3 py-1 rounded-lg flex items-center gap-2">
-                                  {peer.username} {isMe && '(Tú)'}
-                                  {isPeerHost && <span className="text-xs bg-yellow-500 text-black px-1.5 rounded-full" title="Anfitrión">★</span>}
+                                <Avatar name={peer.username} color={peer.color} size="lg" className="text-xl md:text-2xl w-16 h-16 md:w-20 md:h-20" />
+                                <div className="absolute bottom-2 left-2 md:bottom-4 md:left-4 text-white font-medium bg-black/50 px-2 py-0.5 md:px-3 md:py-1 rounded-lg flex items-center gap-1.5 md:gap-2 text-xs md:text-sm">
+                                  <span className="max-w-[100px] truncate">{peer.username} {isMe && '(Tú)'}</span>
+                                  {isPeerHost && <span className="text-[10px] md:text-xs bg-yellow-500 text-black px-1.5 rounded-full" title="Anfitrión">★</span>}
                                 </div>
                               </div>
                            )}
@@ -381,25 +387,25 @@ export default function Room() {
         </div>
 
         {/* Sidebar (Videos/Chat) */}
-        <div className={`transition-all duration-300 ease-in-out border-l border-white/20 dark:border-white/10 bg-white/80 dark:bg-dark-surface/80 backdrop-blur-md flex flex-col ${showSidebar ? 'w-80 translate-x-0' : 'w-0 translate-x-full overflow-hidden opacity-0'}`}>
+        <div className={`fixed inset-0 top-14 bottom-16 md:static md:inset-auto z-40 md:z-auto transition-all duration-300 ease-in-out md:border-l border-white/20 dark:border-white/10 bg-white/95 dark:bg-dark-surface/95 md:bg-white/80 md:dark:bg-dark-surface/80 backdrop-blur-xl md:backdrop-blur-md flex flex-col ${showSidebar ? 'translate-x-0 w-full md:w-80 opacity-100' : 'translate-x-full w-0 opacity-0 md:opacity-100 pointer-events-none md:pointer-events-auto'}`}>
           
           <div className="p-4 flex flex-col h-full gap-4">
              {/* Tabs */}
              <div className="flex bg-gray-100/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-xl p-1 shrink-0">
                <button
-                 onClick={() => setActiveTab('participants')}
-                 className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'participants' ? 'bg-white text-primary shadow-sm dark:bg-gray-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
-               >
-                 <Users size={18} />
-                 Participantes
-               </button>
-               <button
-                 onClick={() => setActiveTab('chat')}
-                 className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'chat' ? 'bg-white text-primary shadow-sm dark:bg-gray-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
-               >
-                 <MessageSquare size={18} />
-                 Chat
-               </button>
+                onClick={() => setActiveTab('participants')}
+                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'participants' ? 'bg-white text-primary shadow-sm dark:bg-gray-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+              >
+                <Users size={18} />
+                Participantes
+              </button>
+              <button
+                onClick={() => setActiveTab('chat')}
+                className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'chat' ? 'bg-white text-primary shadow-sm dark:bg-gray-700 dark:text-white' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}
+              >
+                <MessageSquare size={18} />
+                Chat
+              </button>
              </div>
 
              {/* Tab Content */}
@@ -480,32 +486,32 @@ export default function Room() {
                  ))}
                      <div ref={chatEndRef} />
                    </div>
-                   <form onSubmit={handleSendMessage} className="mt-4 flex gap-2 shrink-0">
-                     <input
-                       type="file"
-                       ref={fileInputRef}
-                       className="hidden"
-                       onChange={handleFileUpload}
-                     />
-                     <button
-                       type="button"
-                       onClick={() => fileInputRef.current?.click()}
-                       className="p-2 text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
-                       title="Enviar archivo"
-                     >
-                       <Paperclip size={20} />
-                     </button>
-                     <input
-                       type="text"
-                       value={messageInput}
-                       onChange={(e) => setMessageInput(e.target.value)}
-                       placeholder="Escribe un mensaje..."
-                       className="flex-1 px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white"
-                     />
-                     <button type="submit" disabled={!messageInput.trim()} className="p-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 shadow-sm">
-                       ➤
-                     </button>
-                   </form>
+                   <form onSubmit={handleSendMessage} className="mt-2 md:mt-4 flex gap-2 shrink-0">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => fileInputRef.current?.click()}
+                      className="p-2 text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                      title="Enviar archivo"
+                    >
+                      <Paperclip size={20} />
+                    </button>
+                    <input
+                      type="text"
+                      value={messageInput}
+                      onChange={(e) => setMessageInput(e.target.value)}
+                      placeholder="Escribe un mensaje..."
+                      className="flex-1 px-3 py-2 text-base md:text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary dark:text-white"
+                    />
+                    <button type="submit" disabled={!messageInput.trim()} className="p-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 shadow-sm flex items-center justify-center min-w-[40px]">
+                      <Send size={18} className="ml-0.5" />
+                    </button>
+                  </form>
                  </div>
                )}
              </div>

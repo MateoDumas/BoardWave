@@ -54,22 +54,22 @@ export const Home = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center text-center animate-slide-up">
+      <div className="relative z-10 w-full max-w-4xl flex flex-col items-center text-center animate-slide-up px-4 md:px-0">
         
         <div className="mb-8 transform hover:scale-105 transition-transform duration-500">
            <Logo size={90} textColor="text-gray-900 dark:text-white" />
         </div>
 
-        <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-500 mb-6 tracking-tight drop-shadow-sm">
+        <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-500 mb-6 tracking-tight drop-shadow-sm leading-tight">
           Colabora sin límites
         </h1>
         
-        <p className="text-xl text-gray-700 dark:text-gray-200 mb-12 max-w-2xl leading-relaxed font-medium">
+        <p className="text-lg md:text-xl text-gray-700 dark:text-gray-200 mb-8 md:mb-12 max-w-2xl leading-relaxed font-medium">
           Videoconferencias instantáneas, pizarra colaborativa y chat en tiempo real. 
           Todo en un solo lugar, sin complicaciones.
         </p>
 
-        <div className="flex flex-col md:flex-row gap-6 w-full max-w-xl">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 w-full max-w-xl">
           
           {/* Create Room Button */}
           <button 
