@@ -518,6 +518,12 @@ export default function Room() {
           </div>
         </div>
       </div>
+      {/* Audio Consumers - Always render to hear audio regardless of video state */}
+      {Array.from(consumers.values())
+        .filter(c => c.kind === 'audio' && !c.paused)
+        .map(c => (
+          <AudioPlayer key={c.id} track={c.track} />
+        ))}
     </div>
   );
 }
