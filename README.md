@@ -1,111 +1,111 @@
 # 🌊 BoardWave
 
-> **Breaking the distance barrier with Glassmorphism & Real-Time Sync.**
+> **Rompiendo la barrera de la distancia con Glassmorphism y Sincronización en Tiempo Real.**
 > 
-> *A modern, high-performance video conferencing platform built for the future of remote collaboration.*
+> *Una plataforma moderna de videoconferencia de alto rendimiento construida para el futuro de la colaboración remota.*
 
-![BoardWave Banner](https://via.placeholder.com/1200x400/1A73E8/ffffff?text=BoardWave+Experience)
-*(Replace with actual screenshot)*
+![BoardWave Banner](https://via.placeholder.com/1200x400/1A73E8/ffffff?text=Experiencia+BoardWave)
+*(Reemplazar con una captura de pantalla real)*
 
-## 🚀 Overview
+## 🚀 Descripción General
 
-**BoardWave** is not just another video chat app. It's a fully integrated collaborative workspace engineered for performance and usability. By leveraging a **Selective Forwarding Unit (SFU)** architecture, we deliver crystal-clear video with minimal bandwidth, while our **CRDT-powered whiteboard** ensures every stroke is synchronized instantly across all clients.
+**BoardWave** no es solo otra aplicación de videochat. Es un espacio de trabajo colaborativo totalmente integrado, diseñado para el rendimiento y la usabilidad. Aprovechando una arquitectura de **Unidad de Reenvío Selectivo (SFU)**, ofrecemos video nítido con un ancho de banda mínimo, mientras que nuestra **pizarra impulsada por CRDT** asegura que cada trazo se sincronice instantáneamente en todos los clientes.
 
-Whether you're brainstorming designs, debugging code, or just catching up, BoardWave provides a seamless, glass-styled environment to get work done.
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend (The Beauty)
-- **React 18 + TypeScript**: Type-safe, component-driven UI.
-- **Vite**: Blazing fast build tool and HMR.
-- **Tailwind CSS**: Custom "Glassmorphism" design system.
-- **Zustand**: Atomic state management for media and UI.
-- **Mediasoup Client**: Robust WebRTC handling.
-
-### Backend (The Beast)
-- **Node.js + Express**: Scalable application server.
-- **Mediasoup**: Powerful SFU router for multi-party video.
-- **Socket.IO**: Real-time signaling and events.
-- **Yjs + WebSocket**: Conflict-free replicated data types (CRDT) for the whiteboard.
-- **SQLite**: Lightweight, efficient user data management.
-
-### Infrastructure
-- **Docker**: Containerized for consistency.
-- **AWS EC2**: Production-grade hosting.
-- **Caddy**: Automatic HTTPS and reverse proxying.
+Ya sea que estés diseñando, depurando código o simplemente poniéndote al día, BoardWave ofrece un entorno fluido y con estilo "glass" para hacer el trabajo.
 
 ---
 
-## ✨ Key Features
+## 🛠️ Stack Tecnológico
 
-### 🎥 Scalable Video Conferencing
-Unlike traditional mesh networks that kill bandwidth, BoardWave uses an **SFU architecture**. The server acts as a router, receiving one stream from each user and forwarding it to others, significantly reducing client-side CPU and network load.
+### Frontend (La Belleza)
+- **React 18 + TypeScript**: UI basada en componentes y tipado seguro.
+- **Vite**: Herramienta de construcción ultra rápida y HMR.
+- **Tailwind CSS**: Sistema de diseño personalizado "Glassmorphism".
+- **Zustand**: Gestión de estado atómica para medios y UI.
+- **Mediasoup Client**: Manejo robusto de WebRTC.
 
-### 🎨 Infinite Real-Time Whiteboard
-Powered by **Yjs**, our whiteboard supports concurrent editing without conflicts. Draw, sketch, and brainstorm with zero latency. It's like being in the same room.
+### Backend (La Bestia)
+- **Node.js + Express**: Servidor de aplicaciones escalable.
+- **Mediasoup**: Potente router SFU para video multiparte.
+- **Socket.IO**: Señalización y eventos en tiempo real.
+- **Yjs + WebSocket**: Tipos de datos replicados libres de conflictos (CRDT) para la pizarra.
+- **SQLite**: Gestión de datos de usuario ligera y eficiente.
 
-### 🖥️ Smart Screen Sharing
-Seamlessly switch between camera and screen share. The UI adapts automatically, giving focus to the content that matters.
-
-### 💬 Rich Chat & File Sharing
-Send text messages or share files instantly. Drag, drop, and done.
-
-### 🔐 Secure & Persistent
-- **JWT Authentication**: Secure session management.
-- **Persistent Rooms**: Your meeting space is always there when you need it.
-
----
-
-## 🧩 Engineering Highlights
-
-> *Things I'm proud of solving:*
-
-*   **Race Condition Handling**: Implemented robust state locking in `mediaStore` to prevent audio/video stream conflicts during rapid toggling.
-*   **Mobile Responsiveness**: Custom grid layouts that adapt from 4K desktops to mobile screens without breaking the immersive glass UI.
-*   **CRDT Synchronization**: Integrated `y-websocket` alongside standard `socket.io` to handle high-frequency whiteboard updates independently of signaling traffic.
+### Infraestructura
+- **Docker**: Contenerizado para consistencia.
+- **AWS EC2**: Alojamiento de grado de producción.
+- **Caddy**: HTTPS automático y proxy inverso.
 
 ---
 
-## 🏃‍♂️ Getting Started
+## ✨ Características Clave
 
-### Prerequisites
+### 🎥 Videoconferencia Escalable
+A diferencia de las redes mesh tradicionales que saturan el ancho de banda, BoardWave utiliza una **arquitectura SFU**. El servidor actúa como un router, recibiendo un flujo de cada usuario y reenviándolo a los demás, reduciendo significativamente la carga de CPU y red en el cliente.
+
+### 🎨 Pizarra Infinita en Tiempo Real
+Impulsada por **Yjs**, nuestra pizarra soporta edición concurrente sin conflictos. Dibuja, boceta y haz lluvia de ideas con latencia cero. Es como estar en la misma habitación.
+
+### 🖥️ Compartir Pantalla Inteligente
+Cambia sin problemas entre la cámara y compartir pantalla. La interfaz se adapta automáticamente, dando foco al contenido que importa.
+
+### 💬 Chat Enriquecido y Compartir Archivos
+Envía mensajes de texto o comparte archivos al instante. Arrastrar, soltar y listo.
+
+### 🔐 Seguro y Persistente
+- **Autenticación JWT**: Gestión de sesiones segura.
+- **Salas Persistentes**: Tu espacio de reunión siempre está ahí cuando lo necesitas.
+
+---
+
+## 🧩 Destacados de Ingeniería
+
+> *Cosas que me enorgullece haber resuelto:*
+
+*   **Manejo de Condiciones de Carrera**: Implementé un bloqueo de estado robusto en `mediaStore` para prevenir conflictos de flujos de audio/video durante cambios rápidos.
+*   **Responsividad Móvil**: Layouts de grid personalizados que se adaptan desde escritorios 4K hasta pantallas móviles sin romper la interfaz inmersiva de vidrio.
+*   **Sincronización CRDT**: Integré `y-websocket` junto con el estándar `socket.io` para manejar actualizaciones de pizarra de alta frecuencia independientemente del tráfico de señalización.
+
+---
+
+## 🏃‍♂️ Comenzando
+
+### Requisitos Previos
 - Node.js v18+
-- npm or yarn
+- npm o yarn
 
-### Installation
+### Instalación
 
-1.  **Clone the repo**
+1.  **Clonar el repositorio**
     ```bash
-    git clone https://github.com/yourusername/boardwave.git
+    git clone https://github.com/tuusuario/boardwave.git
     cd boardwave
     ```
 
-2.  **Install Backend Dependencies**
+2.  **Instalar Dependencias del Backend**
     ```bash
     cd backend
     npm install
     ```
 
-3.  **Install Frontend Dependencies**
+3.  **Instalar Dependencias del Frontend**
     ```bash
     cd ../frontend
     npm install
     ```
 
-4.  **Run Development Servers**
-    *   Backend: `npm run dev` (Port 3000)
-    *   Frontend: `npm run dev` (Port 5173)
+4.  **Ejecutar Servidores de Desarrollo**
+    *   Backend: `npm run dev` (Puerto 3000)
+    *   Frontend: `npm run dev` (Puerto 5173)
 
 ---
 
-## 👨‍💻 Author
+## 👨‍💻 Autor
 
-**Mateo** - *Full Stack Developer*
+**Mateo** - *Desarrollador Full Stack*
 
-*Passionate about building scalable real-time applications and intuitive user interfaces.*
+*Apasionado por construir aplicaciones escalables en tiempo real e interfaces de usuario intuitivas.*
 
 ---
 
-*Built with ❤️ and ☕ using the T3-ish Stack.*
+*Construido con ❤️ y ☕ usando el Stack T3-ish.*
