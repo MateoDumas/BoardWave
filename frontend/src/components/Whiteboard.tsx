@@ -114,13 +114,16 @@ export default function Whiteboard({ roomId }: WhiteboardProps) {
     });
   };
 
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
     isDrawing.current = true;
     const { offsetX, offsetY } = e.nativeEvent;
     lastPoint.current = { x: offsetX, y: offsetY };
+    
+    // Capturar el puntero para que siga dibujando incluso si sale del canvas
+    (e.target as Element).setPointerCapture(e.pointerId);
   };
 
-  const draw = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawing.current || !lastPoint.current || !strokesRef.current) return;
     
     const { offsetX, offsetY } = e.nativeEvent;
@@ -171,47 +174,47 @@ export default function Whiteboard({ roomId }: WhiteboardProps) {
       )}
       
       {/* Toolbar */}
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white shadow-md rounded-full px-4 py-2 flex items-center gap-4 z-10 border border-gray-200">
-        <div className="flex items-center gap-2 border-r border-gray-200 pr-4">
+      <div className="absolute top-2 md:top-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl md:rounded-full px-2 md:px-4 py-1.5 md:py-2 flex items-center gap-2 md:gap-4 z-10 border border-gray-200 max-w-[95%] overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-1 md:gap-2 border-r border-gray-200 pr-2 md:pr-4">
             <button 
                 onClick={() => setTool('pen')}
-                className={`p-2 rounded-full transition-colors ${tool === 'pen' ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}
+                className={`p-1.5 md:p-2 rounded-lg md:rounded-full transition-colors ${tool === 'pen' ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}
                 title="Lápiz"
             >
-                <Pen size={18} />
+                <Pen size={16} className="md:w-[18px] md:h-[18px]" />
             </button>
             <button 
                 onClick={() => setTool('eraser')}
-                className={`p-2 rounded-full transition-colors ${tool === 'eraser' ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}
+                className={`p-1.5 md:p-2 rounded-lg md:rounded-full transition-colors ${tool === 'eraser' ? 'bg-gray-100 text-primary' : 'text-gray-500 hover:bg-gray-50'}`}
                 title="Borrador"
             >
-                <Eraser size={18} />
+                <Eraser size={16} className="md:w-[18px] md:h-[18px]" />
             </button>
         </div>
 
-        <div className="flex items-center gap-2 border-r border-gray-200 pr-4">
-            <button onClick={() => { setColor('#000000'); setTool('pen'); }} className={`w-6 h-6 rounded-full bg-black border-2 ${color === '#000000' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Negro" />
-            <button onClick={() => { setColor('#ef4444'); setTool('pen'); }} className={`w-6 h-6 rounded-full bg-red-500 border-2 ${color === '#ef4444' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Rojo" />
-            <button onClick={() => { setColor('#3b82f6'); setTool('pen'); }} className={`w-6 h-6 rounded-full bg-blue-500 border-2 ${color === '#3b82f6' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Azul" />
-            <button onClick={() => { setColor('#22c55e'); setTool('pen'); }} className={`w-6 h-6 rounded-full bg-green-500 border-2 ${color === '#22c55e' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Verde" />
+        <div className="flex items-center gap-1.5 md:gap-2 border-r border-gray-200 pr-2 md:pr-4">
+            <button onClick={() => { setColor('#000000'); setTool('pen'); }} className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-black border-2 ${color === '#000000' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Negro" />
+            <button onClick={() => { setColor('#ef4444'); setTool('pen'); }} className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-red-500 border-2 ${color === '#ef4444' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Rojo" />
+            <button onClick={() => { setColor('#3b82f6'); setTool('pen'); }} className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-blue-500 border-2 ${color === '#3b82f6' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Azul" />
+            <button onClick={() => { setColor('#22c55e'); setTool('pen'); }} className={`w-5 h-5 md:w-6 md:h-6 rounded-full bg-green-500 border-2 ${color === '#22c55e' && tool === 'pen' ? 'border-primary scale-110' : 'border-transparent'}`} title="Verde" />
         </div>
 
         <button 
             onClick={clearBoard}
-            className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+            className="p-1.5 md:p-2 text-red-500 hover:bg-red-50 rounded-lg md:rounded-full transition-colors"
             title="Borrar todo"
         >
-            <Trash2 size={18} />
+            <Trash2 size={16} className="md:w-[18px] md:h-[18px]" />
         </button>
       </div>
 
       <canvas
         ref={canvasRef}
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        className="touch-none"
+        onPointerDown={startDrawing}
+        onPointerMove={draw}
+        onPointerUp={stopDrawing}
+        onPointerCancel={stopDrawing}
+        className="touch-none w-full h-full"
       />
     </div>
   );

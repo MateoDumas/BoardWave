@@ -279,7 +279,7 @@ export default function Room() {
              <button 
                 onClick={handleToggleScreen}
                 title="Compartir Pantalla"
-                className={`hidden md:flex w-12 h-12 rounded-full items-center justify-center transition-all duration-200 ${localScreenStream ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
+                className={`flex w-10 h-10 md:w-12 md:h-12 rounded-full items-center justify-center transition-all duration-200 ${localScreenStream ? 'bg-primary text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
                 <MonitorUp size={18} />
              </button>
              
